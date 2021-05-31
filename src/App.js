@@ -1,22 +1,39 @@
+import TodoList from './Todo/TodoList'
+import React from 'react'
+import Context from './Context'
 
 function App() {
+  const [todos, setTodos] = React.useState([
+    { id: 1, completed: false, title: 'купить хлеб' },
+    { id: 2, completed: true, title: 'купить масло' },
+    { id: 3, completed: false, title: 'купить молоко' }
+  ])
+ 
+  function toggleTodo(id) {
+    setTodos(
+        todos.map(todo => {
+        if (todo.id === id) {
+          todo.completed = !todo.completed
+        }
+        return todo
+      })
+    )
+  }
+
+  function removeTodo(id) {
+    setTodos(
+      todos.filter(todo => todo.id !== id)
+    )
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <Context.Provider value={{ removeTodo }}>    
+    <div className="wrapper">
+      <h1>REACT TUTORIAL</h1>
+      {todos.length ? <TodoList todos={todos} onToggle={toggleTodo}/> : <p>No todos</p>}
+      
     </div>
-  );
+    </Context.Provider>
+  )
 }
 
 export default App;
